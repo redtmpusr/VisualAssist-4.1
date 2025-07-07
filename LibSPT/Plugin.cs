@@ -11,7 +11,7 @@ namespace VisualAssist;
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public class Plugin : BaseUnityPlugin
 {
-    public const string VisualAssistVersion = "1.0.3";
+    public const string VisualAssistVersion = "1.0.4";
 
     public static ManualLogSource Log;
 

@@ -42,7 +42,7 @@ public class GrenadeArc : MonoBehaviour
         // Set the color
         _line.startColor = Plugin.GrenadeArcStartColor.Value;
         _line.endColor = Plugin.GrenadeArcEndColor.Value;
-        
+
         // Set the width
         _line.startWidth = Plugin.GrenadeArcStartGirth.Value;
         _line.endWidth = Plugin.GrenadeArcEndGirth.Value;
@@ -55,7 +55,7 @@ public class GrenadeArc : MonoBehaviour
         {
             color = Plugin.GrenadeArcKnobColor.Value
         };
-        
+
         Plugin.GrenadeArcStartColor.SettingChanged += UpdateSettings;
         Plugin.GrenadeArcEndColor.SettingChanged += UpdateSettings;
         Plugin.GrenadeArcKnobColor.SettingChanged += UpdateSettings;
@@ -65,7 +65,7 @@ public class GrenadeArc : MonoBehaviour
         
         _positions = new Vector3[200];
         _playerVelocity = Vector3.zero;
-        
+
         _gravity = -Physics.gravity.y;
 
         _itemName = null;
@@ -83,19 +83,19 @@ public class GrenadeArc : MonoBehaviour
         
         Plugin.Log.LogInfo("Unsubscribed GrenadeArc from config notifications");
     }
-    
+
     public void LateUpdate()
     {
         if (localPlayer == null || !localPlayer.HealthController.IsAlive || !Plugin.GrenadeArcEnabled.Value)
             return;
-        
+
         _playerVelocity = Vector3.Lerp(localPlayer.Velocity, _playerVelocity, 0.9f);
 
         var grenadeHandsController = localPlayer.HandsController as Player.GrenadeHandsController;
 
         if (grenadeHandsController == null
-            || (grenadeHandsController.CurrentOperation is not Player.GrenadeHandsController.Class1156
-                && grenadeHandsController.CurrentOperation is not Player.GrenadeHandsController.Class1157))
+            || (grenadeHandsController.CurrentOperation is not Player.GrenadeHandsController.Class1275
+                && grenadeHandsController.CurrentOperation is not Player.GrenadeHandsController.Class1276))
         {
             _line.enabled = false;
             _sphereRenderer.enabled = false;
@@ -106,7 +106,7 @@ public class GrenadeArc : MonoBehaviour
             _line.enabled = true;
 
         // Class1156 is high throw 1157 low throw
-        var isLowThrow = grenadeHandsController.CurrentOperation is Player.GrenadeHandsController.Class1157;
+        var isLowThrow = grenadeHandsController.CurrentOperation is Player.GrenadeHandsController.Class1276;
         GrenadeThrow = CalculateGrenadeThrow(isLowThrow);
 
         if (grenadeHandsController.Item != null && _itemName != grenadeHandsController.Item.Name)
@@ -180,7 +180,7 @@ public class GrenadeArc : MonoBehaviour
         var throwPosition = localPlayer.PlayerBones.WeaponRoot.Original.position + 0.5f * direction;
         return new GrenadeThrow { ThrowPosition = throwPosition, ThrowForce = force };
     }
-    
+
     private void UpdateSettings(object sender, EventArgs e)
     {
         // This is very lazy but I can't be bothered a sophisticated notification system just so people can tweak their knob in real time...
@@ -189,7 +189,7 @@ public class GrenadeArc : MonoBehaviour
         
         _line.startColor = Plugin.GrenadeArcStartColor.Value;
         _line.endColor = Plugin.GrenadeArcEndColor.Value;
-        
+
         _sphere.transform.localScale = Vector3.one * Plugin.GrenadeArcKnobSize.Value;
         _sphereRenderer.material.color = Plugin.GrenadeArcKnobColor.Value;
     }
@@ -253,7 +253,9 @@ public class GrenadeArc : MonoBehaviour
             var prevPos = positions[i - 1];
             var arcLine = candidatePos - prevPos;
 
-            if (Physics.SphereCast(prevPos, 0.05f, arcLine.normalized, out var hit, arcLine.magnitude, GClass3449.HitMask.value))
+            if (Physics.SphereCast(
+                    prevPos, 0.05f, arcLine.normalized, out var hit, arcLine.magnitude, LayerMasksDataAbstractClass.HitMask.value
+                ))
             {
                 positions[i] = hit.point;
                 positionCount = i + 1;
