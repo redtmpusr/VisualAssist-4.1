@@ -79,7 +79,7 @@ public class Plugin : BaseUnityPlugin
             new AcceptableValueRange<float>(0.01f, 1f),
             tags: new ConfigurationManagerAttributes { Order = 2 }
         ));
-        GrenadeArcResolution = Config.Bind(headerAssist, "Max Grenade Assist Resolution", 0.5f, new ConfigDescription(
+        GrenadeArcResolution = Config.Bind(headerAssist, "Grenade Assist Resolution", 0.5f, new ConfigDescription(
             "Step size when calculating the grenade arc. Too small values take exponentially more time to compute and too large values become inaccurate.",
             new AcceptableValueRange<float>(0.1f, 2f),
             tags: new ConfigurationManagerAttributes { Order = 1, IsAdvanced = true }
