@@ -20,7 +20,12 @@ public class GrenadeSetThrowForcePrefixPatch : ModulePatch
     {
         var grenadeArc = Singleton<GrenadeArc>.Instance;
 
-        if (!__instance.Player.iPlayer.IsYourPlayer || grenadeArc is null || !Plugin.GrenadeArcEnabled.Value)
+        if (grenadeArc is null
+            || ___Rigidbody is null
+            || __instance.Player is null
+            || __instance.Player.iPlayer is null
+            || !__instance.Player.iPlayer.IsYourPlayer
+            || !Plugin.GrenadeArcEnabled.Value)
             return true;
 
         __instance.transform.position = grenadeArc.GrenadeThrow.ThrowPosition;
