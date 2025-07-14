@@ -57,34 +57,34 @@ public class Plugin : BaseUnityPlugin
 
         GrenadeArcEnabled = Config.Bind(headerAssist, "Enable Grenade Assist", true, new ConfigDescription(
             "Toggles a visual grenade assist - mostly for helping with 3rd person aiming.",
-            tags: new ConfigurationManagerAttributes { Order = 8 }
+            tags: new ConfigurationManagerAttributes { Order = 9 }
         ));
         GrenadeArcDistance = Config.Bind(headerAssist, "Max Grenade Assist Distance", 25f, new ConfigDescription(
             "How far to draw the grenade assist arc.",
             new AcceptableValueRange<float>(1f, 50f),
-            tags: new ConfigurationManagerAttributes { Order = 7 }
+            tags: new ConfigurationManagerAttributes { Order = 8 }
         ));
         GrenadeArcStartColor = Config.Bind(headerAssist, "Grenade Arc Start Color", new Color(0, 1, 0, 0f), new ConfigDescription(
             "Color of the start of the grenade arc. Make sure to configure the alpha value correctly so that you get a nice fade.",
-            tags: new ConfigurationManagerAttributes { Order = 6 }
+            tags: new ConfigurationManagerAttributes { Order = 7 }
         ));
         GrenadeArcEndColor = Config.Bind(headerAssist, "Grenade Arc End Color", new Color(1, 0, 0, 0.75f), new ConfigDescription(
             "Color of the end of the grenade arc. Make sure to configure the alpha value correctly so that you get a nice fade.",
-            tags: new ConfigurationManagerAttributes { Order = 5 }
+            tags: new ConfigurationManagerAttributes { Order = 6 }
         ));
         GrenadeArcKnobColor = Config.Bind(headerAssist, "Grenade Arc Knob Color", new Color(1, 0, 0, 0.75f), new ConfigDescription(
             "The uh, color of the knob. At the end of the big curved thing. Knob.",
-            tags: new ConfigurationManagerAttributes { Order = 4 }
+            tags: new ConfigurationManagerAttributes { Order = 5 }
         ));
         GrenadeArcKnobSize = Config.Bind(headerAssist, "Grenade Arc Knob Size", 0.2f, new ConfigDescription(
             "Giggity.",
             new AcceptableValueRange<float>(0.01f, 1f),
-            tags: new ConfigurationManagerAttributes { Order = 3 }
+            tags: new ConfigurationManagerAttributes { Order = 4 }
         ));
         GrenadeArcStartGirth = Config.Bind(headerAssist, "Grenade Arc Start Girth", 0.1f, new ConfigDescription(
             "Giggity.",
             new AcceptableValueRange<float>(0.01f, 1f),
-            tags: new ConfigurationManagerAttributes { Order = 2 }
+            tags: new ConfigurationManagerAttributes { Order = 3 }
         ));
         GrenadeArcEndGirth = Config.Bind(headerAssist, "Grenade Arc End Girth", 0.05f, new ConfigDescription(
             "Giggity.",
