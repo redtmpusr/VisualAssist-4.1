@@ -37,8 +37,8 @@ public class GrenadeArc : MonoBehaviour
         _line.endColor = Plugin.GrenadeArcEndColor.Value;
         
         // Set the width
-        _line.startWidth = 0.1f;
-        _line.endWidth = 0.05f;
+        _line.startWidth = Plugin.GrenadeArcStartGirth.Value;
+        _line.endWidth = Plugin.GrenadeArcEndGirth.Value;
 
         _sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         _sphere.transform.localScale = Vector3.one * Plugin.GrenadeArcKnobSize.Value;
@@ -53,6 +53,8 @@ public class GrenadeArc : MonoBehaviour
         Plugin.GrenadeArcEndColor.SettingChanged += UpdateSettings;
         Plugin.GrenadeArcKnobColor.SettingChanged += UpdateSettings;
         Plugin.GrenadeArcKnobSize.SettingChanged += UpdateSettings;
+        Plugin.GrenadeArcStartGirth.SettingChanged += UpdateSettings;
+        Plugin.GrenadeArcEndGirth.SettingChanged += UpdateSettings;
         
         _positions = new Vector3[200];
         _playerVelocity = Vector3.zero;
@@ -66,6 +68,8 @@ public class GrenadeArc : MonoBehaviour
         Plugin.GrenadeArcEndColor.SettingChanged -= UpdateSettings;
         Plugin.GrenadeArcKnobColor.SettingChanged -= UpdateSettings;
         Plugin.GrenadeArcKnobSize.SettingChanged -= UpdateSettings;
+        Plugin.GrenadeArcStartGirth.SettingChanged -= UpdateSettings;
+        Plugin.GrenadeArcEndGirth.SettingChanged -= UpdateSettings;
         
         Plugin.Log.LogInfo("Unsubscribed GrenadeArc from config notifications");
     }
@@ -153,6 +157,9 @@ public class GrenadeArc : MonoBehaviour
     private void UpdateSettings(object sender, EventArgs e)
     {
         // This is very lazy but I can't be bothered a sophisticated notification system just so people can tweak their knob in real time...
+        _line.startWidth = Plugin.GrenadeArcStartGirth.Value;
+        _line.endWidth = Plugin.GrenadeArcEndGirth.Value;
+        
         _line.startColor = Plugin.GrenadeArcStartColor.Value;
         _line.endColor = Plugin.GrenadeArcEndColor.Value;
         
