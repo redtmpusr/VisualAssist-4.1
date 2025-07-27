@@ -2,35 +2,38 @@
 using System.Reflection;
 using Comfort.Common;
 using EFT;
+using EFT.UI;
 using SPT.Reflection.Patching;
 using UnityEngine;
 
 namespace VisualAssist;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-public class GrenadeSetThrowForcePrefixPatch : ModulePatch
+public class GrenadeThrowPrefixPatch : ModulePatch
 {
     protected override MethodBase GetTargetMethod()
     {
-        return typeof(Grenade).GetMethod(nameof(Grenade.SetThrowForce));
+        return typeof(Player.BaseGrenadeHandsController).GetMethod(nameof(Player.BaseGrenadeHandsController.method_9));
     }
 
     [PatchPrefix]
-    public static bool Prefix(Grenade __instance, Rigidbody ___Rigidbody, ref Vector3 ___Velocity)
+    public static bool Prefix(
+        Player.BaseGrenadeHandsController __instance, Player ____player, Transform ___transform_1, bool lowThrow, float timeSinceSafetyLevelRemoved,
+        GrenadePrefab ___grenadePrefab_0
+    )
     {
         var grenadeArc = Singleton<GrenadeArc>.Instance;
 
         if (grenadeArc is null
-            || ___Rigidbody is null
-            || __instance.Player is null
-            || __instance.Player.iPlayer is null
-            || !__instance.Player.iPlayer.IsYourPlayer
+            || ____player is null
+            || !____player.IsYourPlayer
             || !Plugin.GrenadeArcEnabled.Value)
             return true;
 
-        __instance.transform.position = grenadeArc.GrenadeThrow.ThrowPosition;
-        ___Velocity = grenadeArc.GrenadeThrow.ThrowForce;
-        ___Rigidbody.AddForce(grenadeArc.GrenadeThrow.ThrowForce, ForceMode.Impulse);
+        __instance.vmethod_2(
+            timeSinceSafetyLevelRemoved, grenadeArc.GrenadeThrow.ThrowPosition, ___transform_1.rotation, grenadeArc.GrenadeThrow.ThrowForce, lowThrow
+        );
+        
         return false;
     }
 }
@@ -68,7 +71,7 @@ public class GrenadeAssistPlayerDisposePrefixPatch : ModulePatch
 
         var grenadeArc = __instance.gameObject.GetComponent<GrenadeArc>();
         if (grenadeArc == null) return;
-        
+
         Singleton<GrenadeArc>.Release(grenadeArc);
         Object.DestroyImmediate(grenadeArc);
         Plugin.Log.LogInfo("Player.Dispose: GrenadeArc destroyed successfully");
@@ -91,7 +94,7 @@ public class GrenadeAssistPlayerOnDeadPrefixPatch : ModulePatch
 
         var grenadeArc = __instance.gameObject.GetComponent<GrenadeArc>();
         if (grenadeArc == null) return;
-        
+
         Singleton<GrenadeArc>.Release(grenadeArc);
         Object.DestroyImmediate(grenadeArc);
         Plugin.Log.LogInfo("Player.Dispose: GrenadeArc destroyed successfully");

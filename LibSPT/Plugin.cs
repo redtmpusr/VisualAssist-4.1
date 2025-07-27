@@ -11,7 +11,7 @@ namespace VisualAssist;
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public class Plugin : BaseUnityPlugin
 {
-    public const string VisualAssistVersion = "1.0.2";
+    public const string VisualAssistVersion = "1.0.3";
 
     public static ManualLogSource Log;
 
@@ -34,7 +34,7 @@ public class Plugin : BaseUnityPlugin
         SetupConfig();
 
         // Grenade
-        new GrenadeSetThrowForcePrefixPatch().Enable();
+        new GrenadeThrowPrefixPatch().Enable();
         new GrenadeAssistGameWorldStartedPostfixPatch().Enable();
         new GrenadeAssistPlayerDisposePrefixPatch().Enable();
         new GrenadeAssistPlayerOnDeadPrefixPatch().Enable();

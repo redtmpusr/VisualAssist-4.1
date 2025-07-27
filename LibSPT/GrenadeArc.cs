@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using EFT;
+using EFT.UI;
+using HarmonyLib;
 using UnityEngine;
 
 namespace VisualAssist;
@@ -15,9 +18,13 @@ public class GrenadeArc : MonoBehaviour
     private Vector3[] _positions;
     private Vector3 _playerVelocity;
 
+    private string _itemName;
+    private float _mass;
+
     private float _gravity;
-    private const float GrenadeMass = 0.5f;
     private const float LinearDrag = 0.1f;
+    
+    private static readonly FieldInfo GrenadePrefabField = AccessTools.Field(typeof(Player.GrenadeHandsController), "grenadePrefab_0");
 
     public void Awake()
     {
@@ -60,6 +67,9 @@ public class GrenadeArc : MonoBehaviour
         _playerVelocity = Vector3.zero;
         
         _gravity = -Physics.gravity.y;
+
+        _itemName = null;
+        _mass = 0.55f;
     }
 
     public void OnDestroy()
@@ -99,14 +109,31 @@ public class GrenadeArc : MonoBehaviour
         var isLowThrow = grenadeHandsController.CurrentOperation is Player.GrenadeHandsController.Class1157;
         GrenadeThrow = CalculateGrenadeThrow(isLowThrow);
 
-        // NB: The grenade weighs 0.6 at the moment that it's initialized but the weight is then set to 0.5 before the force applied.
+        if (grenadeHandsController.Item != null && _itemName != grenadeHandsController.Item.Name)
+        {
+            var prefab = GrenadePrefabField.GetValue(grenadeHandsController) as GrenadePrefab;
+            
+            if (prefab != null && prefab.GrenadeItself != null && prefab.GrenadeItself.gameObject != null)
+            {
+                var rigidbody = prefab.GrenadeItself.gameObject.GetComponent<Rigidbody>();
+
+                if (rigidbody != null)
+                {
+                    _mass = rigidbody.mass;          
+                    _itemName = grenadeHandsController.Item.Name;
+                }
+            }
+        }
+        
+        // NB: The actual grenade weight is either 0.5 or 0.6, depending on the item.
+        // The mass itself seems to materialize in the rigidbody that's attached to the grenade in a roundabout way.
         // Velocity is (impulse / rigidbody.mass) * Time.fixedDeltaTime, assuming that the impulse was scaled up to 1 second unit by dividing by fixedDeltaTime
         // Since we don't do the division by fixedDeltaTime in CalculateGrenadeThrow, we don't need to multiply here.
         // NB: in AddForce with Impulse mode, unity will assume that the impulse is *per fixed frame time* and will then scale it up to a whole second
         // if we observe the accumulated forces on the rigidbody.
         // Drag is implemented as Mathf.Clamp01(1f - rigidbody.drag * Time.fixedDeltaTime) ran every fixed delta frame
         // The drag itself seems to be set to 0.1f
-        var throwVelocity = GrenadeThrow.ThrowForce / GrenadeMass;
+        var throwVelocity = GrenadeThrow.ThrowForce / _mass;
         var intervalDistance = Plugin.GrenadeArcResolution.Value;
         var maxDistance = Plugin.GrenadeArcDistance.Value;
         var collided = GetBallisticArcWithLinearDrag(
