@@ -6,12 +6,12 @@ using UnityEngine;
 
 namespace VisualAssist;
 
-[BepInPlugin("com.janky.visualassist", "Janky's Visual Assist", VisualAssistVersion)]
+[BepInPlugin("com.janky.visualassist", "Janky-VisualAssist", VisualAssistVersion)]
 [SuppressMessage("ReSharper", "HeapView.ObjectAllocation.Evident")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public class Plugin : BaseUnityPlugin
 {
-    public const string VisualAssistVersion = "1.0.4";
+    public const string VisualAssistVersion = "1.1.0";
 
     public static ManualLogSource Log;
 
