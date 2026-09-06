@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Comfort.Common;
 using EFT;
@@ -13,7 +13,7 @@ public class GrenadeThrowPrefixPatch : ModulePatch
 {
     protected override MethodBase GetTargetMethod()
     {
-        return typeof(Player.BaseGrenadeHandsController).GetMethod(nameof(Player.BaseGrenadeHandsController.method_9));
+        return typeof(Player.BaseGrenadeHandsController).GetMethod(nameof(Player.BaseGrenadeHandsController.ThrowGrenadeInner));
     }
 
     [PatchPrefix]
@@ -30,7 +30,7 @@ public class GrenadeThrowPrefixPatch : ModulePatch
             || !Plugin.GrenadeArcEnabled.Value)
             return true;
 
-        __instance.vmethod_2(
+        __instance.ThrowGrenade(
             timeSinceSafetyLevelRemoved, grenadeArc.GrenadeThrow.ThrowPosition, ___transform_1.rotation, grenadeArc.GrenadeThrow.ThrowForce, lowThrow
         );
         
