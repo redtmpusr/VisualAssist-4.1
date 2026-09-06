@@ -18,7 +18,7 @@ public class GrenadeThrowPrefixPatch : ModulePatch
 
     [PatchPrefix]
     public static bool Prefix(
-        Player.BaseGrenadeHandsController __instance, Player ____player, Transform ___transform_1, bool lowThrow, float timeSinceSafetyLevelRemoved,
+        Player.BaseGrenadeHandsController __instance, Player ____player, Transform ____patronInWeaponTransform, bool lowThrow, float timeSinceSafetyLevelRemoved,
         GrenadePrefab ___grenadePrefab_0
     )
     {
@@ -31,7 +31,7 @@ public class GrenadeThrowPrefixPatch : ModulePatch
             return true;
 
         __instance.ThrowGrenade(
-            timeSinceSafetyLevelRemoved, grenadeArc.GrenadeThrow.ThrowPosition, ___transform_1.rotation, grenadeArc.GrenadeThrow.ThrowForce, lowThrow
+            timeSinceSafetyLevelRemoved, grenadeArc.GrenadeThrow.ThrowPosition, ____patronInWeaponTransform.rotation, grenadeArc.GrenadeThrow.ThrowForce, lowThrow
         );
         
         return false;
